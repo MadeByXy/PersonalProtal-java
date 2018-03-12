@@ -96,9 +96,18 @@ public class ApiResult<T, V> {
      * @param message: 失败原因
      */
     public static ApiResult ToFail(String message) {
-        ApiResult<String, String> result = new ApiResult<String, String>();
+        return ApiResult.ToFail(message, "");
+    }
+
+    /*** 返回失败的请求结果
+     * @param message: 失败原因
+     * @param object: 单元素返回的值
+     */
+    public static <T, V> ApiResult ToFail(String message, T object) {
+        ApiResult<T, V> result = new ApiResult<T, V>();
         result.success = false;
         result.message = message;
+        result.object = object;
         return result;
     }
 }
