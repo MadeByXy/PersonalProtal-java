@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小雨个人网站</title>
+    <link rel="stylesheet" href="../style/nifty/css/nifty.css">
+    <link rel="stylesheet" href="../style/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../style/bootstrap/css/blog.css">
+    <link rel="stylesheet" href="../style/css/newIndex.css">
+    <link rel="stylesheet" href="../style/bootstrap-select/bootstrap-select.css">
+    <link rel="stylesheet" href="../style/bootstrap-datepicker/bootstrap-datepicker.css">
+
+    <script src="../style/scripts/sortable.min.js"></script>
+    <script src="../style/scripts/jQuery3-1-1.js"></script>
+    <script src="../style/scripts/underscore-min.js"></script>
+    <script src="../style/bootstrap/scripts/bootstrap.min.js"></script>
+    <script src="../style/scripts/jquery.nicescroll.js"></script>
+    <script src="../style/angular/angular.js"></script>
+    <script src="../style/angular/angular-ui-router.js"></script>
+    <script src="../style/angular/ocLazyLoad.js"></script>
+    <script src="../style/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="../style/scripts/bootbox.min.js"></script>
+    <script src="../style/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="../style/nifty/scripts/nifty.min.js"></script>
+    <script src="../style/scripts/linq.js"></script>
+
+    <script src="../style/route/enum.js"></script>
+    <script src="../style/route/factory.js"></script>
+    <script src="../style/route/app.js"></script>
+
+    <script src="index.js"></script>
+</head>
+<body ng-app="app" ng-controller="IndexController">
+<header>
+    <div class="blog-masthead">
+        <div class="container">
+            <nav class="nav">
+                <a class="nav-link shadow" href="#home" target="_self">主页</a>
+                <!--导航标签-->
+                <div class="nav-div ng-cloak" ng-cloak ng-repeat="x in Navigation">
+                    <a ng-cloak href="{{x.LinkUrl}}" ng-show="x.Navigation.length == 0" target="Frame"
+                       class="nav-link nav-clear shadow" ng-bind="x.LinkName"></a>
+                    <a ng-cloak href="{{x.LinkUrl}}" ng-show="x.Navigation.length > 0"
+                       class="dropdown-toggle nav-link nav-clear shadow" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        {{x.LinkName}}<span ng-cloak class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-dositioning">
+                        <li role="presentation" ng-repeat="item in x.Navigation">
+                            <a class="shadow" href="{{item.LinkUrl}}" target="{{item.Target||'Frame'}}"
+                               ng-bind="item.LinkName"></a>
+                        </li>
+                    </ul>
+                </div>
+                <!--搜索栏-->
+                <div class="row col-lg-6 input-group nav-div ng-cloak" ng-cloak>
+                    <div style="position: inherit;" ng-mouseleave="SuggestionItems = [];">
+                        <input type="text" class="form-control shadow" ng-model="searchText" ng-click="GetSuggestion()"
+                               ng-change="GetSuggestion()" ng-keydown="Search($event)" placeholder="搜索">
+                        <ul class="Suggestion" ng-show="!IsNull(SuggestionItems) && SuggestionItems.length != 0">
+                            <li class="shadow" ng-class="{true:'active'}[SuggestionIndex == $index]"
+                                ng-mousemove="$parent.SuggestionIndex = $index" ng-repeat="item in SuggestionItems"
+                                ng-click="$parent.searchText = item;$parent.SuggestionItems = [];" ng-bind="item"></li>
+                        </ul>
+                    </div>
+                    <div class="input-group-btn">
+                        <a id="search" class="btn btn-default shadow" ng-click="Search($event)"
+                           ng-bind="SearchEngineList.data[SearchEngineList.select].name"></a>
+                        <button type="button" class="btn btn-default dropdown-toggle"
+                                style="padding-left:5px;padding-right:5px;"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>&zwnj;
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="item in SearchEngineList.data">
+                                <a class="shadow" href="javascript:void(0);"
+                                   ng-click="$parent.SearchEngineList.select = $index" ng-bind="item.name"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<div ui-view></div>
+<div class="nifty-noty"></div>
+</body>
+</html>

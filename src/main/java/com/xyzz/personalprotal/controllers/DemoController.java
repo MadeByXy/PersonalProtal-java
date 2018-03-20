@@ -1,12 +1,11 @@
 package com.xyzz.personalprotal.controllers;
 
 import com.xyzz.personalprotal.common.DataBase;
-import com.xyzz.personalprotal.models.ApiResult;
+import com.xyzz.personalprotal.models.common.ApiResult;
 import com.xyzz.personalprotal.models.mapper.UserMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sun.java2d.pipe.AAShapePipe;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

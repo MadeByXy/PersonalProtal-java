@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="../../style/css/plugins/rightDialog.css">
+<div id="ReplaceId" class="dialog" ng-class="{true: 'active'}[IsOpen]"
+     ng-style="{'right': '-' + Width + 'px', 'width': Width + 'px'}">
+    <div class="content">
+        <!--标题-->
+        <div class="dialog-title" ng-if="!factory.IsNull(Title)">
+            <span ng-bind="Title"></span>
+            <div class="control_box" style="float: right;">
+                <a href="javascript:void(0);" class="ed_icon {{option.icon}}" title="{{option.title}}"
+                   ng-click="CustomButton($index)" ng-repeat="option in Options"></a>
+            </div>
+        </div>
+        <!--内容区-->
+        <div class="srolling" ng-scrolling>
+            <div ng-include="Src"></div>
+        </div>
+        <!--按键区-->
+        <div class="dialog-button clearfix" ng-if="Buttons.length > 0">
+            <a href="javascript:void(0);" ng-repeat="button in Buttons"
+               ng-click="ButtonClick(button.action, button.dataCheck)"
+               ng-class="{true: 'active'}[$index == 0]" ng-bind="button.text"></a>
+        </div>
+    </div>
+    <!--遮罩层-->
+    <div class="mask" ng-click="Close()" ng-show="IsOpen"></div>
+</div>

@@ -1,4 +1,4 @@
-package com.xyzz.personalprotal.models;
+package com.xyzz.personalprotal.models.common;
 
 import java.util.ArrayList;
 
