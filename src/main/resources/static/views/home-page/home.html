@@ -1,3 +1,56 @@
-<div ng-controller="HomeController">
-    <h1 ng-bind="Text"></h1>
+<link rel="stylesheet" href="/style/css/home-page/home.css">
+<div ng-controller="HomeController" ng-init="Init()" ng-cloak>
+    <div class="jumbotron main">
+        <div class="weather">
+            <img ng-src="{{WeatherInfo.weatherIcon}}"/>
+            <div style="padding-top:20px;">
+                <p ng-bind="WeatherInfo.temperature"></p>
+                <p ng-bind="WeatherInfo.weather"></p>
+                <p ng-bind="WeatherInfo.wind"></p>
+            </div>
+            <div>
+                <p><span ng-bind="WeatherInfo.time"></span>(实时:<span ng-bind="WeatherInfo.currentTemp"></span>℃)</p>
+                <p ng-bind="WeatherInfo.city"></p>
+            </div>
+        </div>
+        <div class="logo visible-lg visible-md">
+            <img src="/style/images/logo.png"/>
+        </div>
+    </div>
+    <!--快捷方式区-->
+    <div class="shortcut-content" ng-sortable="{items: '.shortcut'}">
+        <div class="shortcut-line" ng-repeat="lineData in ShortCutData track by $index"
+             ng-style="{height: (100 / ShortCutData.length) + '%'}">
+            <div class="shortcut" ng-repeat="data in lineData track by $index"
+                 ng-click="data.show ? Open(data) : OpenEdit(data)"
+                 ng-init="hover = false" ng-mouseover="hover = true" ng-mouseleave="hover = false"
+                 ng-style="{width: (100.0 / lineData.length - 2) + '%', paddingBottom: ((100.0 / lineData.length - 2) * 5 / 6) + '%'}">
+                <!--修改Button-->
+                <button ng-show="data.show && hover"
+                        ng-click="OpenEdit(data);$event.stopPropagation();"
+                        class="float left glyphicon glyphicon-pencil"></button>
+                <!--删除Button-->
+                <button ng-click="Delete(data);$event.stopPropagation();" ng-show="data.show && hover"
+                        class="float right glyphicon glyphicon-remove closeButton"></button>
+                <!--主显示区-->
+                <button class="mainButton" ng-class="{true: 'position-fix'}[data.show && hover]"
+                        ng-style="{backgroundColor: data.show ? ColorLibrary[GetNumber(data.name) % ColorLibrary.length] : 'white'}">
+                    <span class="glyphicon glyphicon-plus icon" ng-show="!data.show"></span>
+                    <span class="bigSize" ng-bind="data.name" ng-show="data.show"></span>
+                </button>
+                <p class="bottom" ng-bind="data.name" ng-class="{true: 'position-fix'}[data.show && hover]"></p>
+            </div>
+        </div>
+    </div>
+    <!--底边栏-->
+    <footer class="bs-docs-footer content" style="clear:both;padding-top: 30px; padding-bottom: 10px;">
+        <div class="container" style="width: 90%;">
+            <p style="margin-bottom: 10px;">本网站为肖禹个人网站，感谢以下开源项目：</p>
+            <ul class="bs-docs-footer-links">
+                <li ng-repeat="item in ThanksList">
+                    <a ng-href="{{item.Url}}" target="_blank" ng-bind="item.Name"></a>
+                </li>
+            </ul>
+        </div>
+    </footer>
 </div>

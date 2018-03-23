@@ -1,6 +1,12 @@
 <link rel="stylesheet" href="../../style/css/plugins/rightDialog.css">
 <div id="ReplaceId" class="dialog" ng-class="{true: 'active'}[IsOpen]"
      ng-style="{'right': '-' + Width + 'px', 'width': Width + 'px'}">
+    <style ng-if="IsOpen">
+        /*提高提示窗高度以避免遮挡按钮*/
+        .nifty-noty {
+            bottom: 55px;
+        }
+    </style>
     <div class="content">
         <!--标题-->
         <div class="dialog-title" ng-if="!factory.IsNull(Title)">
@@ -11,7 +17,7 @@
             </div>
         </div>
         <!--内容区-->
-        <div class="srolling" ng-scrolling>
+        <div class="srolling" ng-scrolling style="padding-top: 10px;">
             <div ng-include="Src"></div>
         </div>
         <!--按键区-->

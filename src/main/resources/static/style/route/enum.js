@@ -23,46 +23,10 @@
     CacheIgnoredTime: 100,
     //周次枚举
     Week: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
-    //通知公告
-    Notice: {
-        //重要等级
-        Level: ['未定义', '一般', '重要', '紧急']
-    },
-    //邮件
-    Message: {
-        //重要等级
-        Level: ['未定义', '普通', '紧急']
-    },
-    //首页相关
-    Home: {
-        //详情跳转页
-        DetailList: {
-            通知公告: {
-                detailUrl: '/views/notice/noticeDetail.html',
-                ChangeData: function (id) {
-                    return {noticeId: id}
-                }
-            }, 收文: {
-                detailUrl: '/views/document/documentDetail.html',
-                ChangeData: function (id) {
-                    return {id: id, type: 'detail', audit: true}
-                }
-            }, 发文: {
-                detailUrl: '/views/document/dispatchDetail.html',
-                ChangeData: function (id) {
-                    return {id: id, type: 'detail', audit: true}
-                }
-            }, 短消息: {
-                detailUrl: '/views/shortMsg/messageDetail.html',
-                ChangeData: function (id) {
-                    return {emailId: id}
-                }
-            }, 学校投稿: {
-                detailUrl: 'news/newsDetail.html',
-                ChangeData: function (id) {
-                    return id
-                }
-            },
-        }
-    }
+    //颜色字典
+    ColorLibrary: [
+        '#3b5999', '#0084ff', '#55acee', '#0077B5', '#00AFF0', '#007ee5', '#21759b', '#1ab7ea', '#0077b5', '#4c75a3',
+        '#34465d', '#410093', '#dd4b39', '#bd081c', '#cd201f', '#eb4924', '#ff5700', '#b92b27', '#af0606', '#df2029',
+        '#da552f', '#ff6600', '#ff3300', '#f57d00', '#25D366', '#da552f', '#df2029', '#02b875', '#00b489', '#3aaf85',
+        '#e4405f', '#ea4c89', '#ff0084', '#f94877', '#131418', '#FFFC00']
 }

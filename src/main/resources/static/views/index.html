@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>小雨个人网站</title>
+
     <link rel="stylesheet" href="../style/nifty/css/nifty.css">
     <link rel="stylesheet" href="../style/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../style/bootstrap/css/blog.css">
+    <link rel="stylesheet" href="../style/bootstrap/css/docs.min.css">
     <link rel="stylesheet" href="../style/css/newIndex.css">
     <link rel="stylesheet" href="../style/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="../style/bootstrap-datepicker/bootstrap-datepicker.css">
 
     <script src="../style/scripts/sortable.min.js"></script>
     <script src="../style/scripts/jQuery3-1-1.js"></script>
+    <script src="../style/scripts/jquery-ui.js"></script>
     <script src="../style/scripts/underscore-min.js"></script>
     <script src="../style/bootstrap/scripts/bootstrap.min.js"></script>
     <script src="../style/scripts/jquery.nicescroll.js"></script>
@@ -23,6 +26,7 @@
     <script src="../style/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="../style/nifty/scripts/nifty.min.js"></script>
     <script src="../style/scripts/linq.js"></script>
+    <script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 
     <script src="../style/route/enum.js"></script>
     <script src="../style/route/factory.js"></script>
@@ -83,7 +87,9 @@
         </div>
     </div>
 </header>
-<div ui-view></div>
+<div ng-scrolling>
+    <div ui-view></div>
+</div>
 <div class="nifty-noty"></div>
 </body>
 </html>

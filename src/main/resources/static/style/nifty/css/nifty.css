@@ -3426,6 +3426,7 @@ h6,
 .alert-wrap.in {
     max-height: 500px;
     transition: max-height 1s linear;
+    z-index: 11001;
 }
 
 .floating-container .animated.alert-wrap {
@@ -5266,10 +5267,10 @@ a.list-group-item-dark:focus {
 }
 
 .alert-info {
-    background-color: #1bc7dc;
-    border-color: transparent;
-    border-left: 3px solid #0c6f7b;
-    color: #fff;
+    background-color: #1bc7dc !important;
+    border-color: transparent !important;
+    border-left: 3px solid #0c6f7b !important;
+    color: #fff !important;
 }
 
 .alert-info .close,
@@ -5480,7 +5481,6 @@ a.list-group-item-dark:focus {
 
 .modal-backdrop.in {
     opacity: 0.75;
-    z-index: 15000;
 }
 
 @media (min-width: 768px) {

@@ -1,5 +1,10 @@
 package com.xyzz.personalprotal.models.common;
 
+import net.minidev.json.JSONObject;
+
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /*** 接口通用返回格式
@@ -76,6 +81,23 @@ public class ApiResult<T, V> {
      */
     public static <T, V> ApiResult ToSuccess(T object, ArrayList<V> array) {
         return ApiResult.ToSuccess("", object, array);
+    }
+
+    /*** 返回成功的请求结果
+     * @param object: 单元素返回的值
+     * @param resultSet: 多元素返回的值
+     */
+    public static <T, V> ApiResult ToSuccess(T object, ResultSet resultSet) throws SQLException {
+        ArrayList<Object> arrayList = new ArrayList<>();
+        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        while (resultSet.next()) {
+            JSONObject data = new JSONObject();
+            for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
+                data.appendField(resultSetMetaData.getColumnName(i), resultSet.getString(i));
+            }
+            arrayList.add(data);
+        }
+        return ApiResult.ToSuccess("", object, arrayList);
     }
 
     /*** 返回成功的请求结果

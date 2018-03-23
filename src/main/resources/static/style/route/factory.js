@@ -37,7 +37,7 @@ app.directive('ngEnter', function () {
 
 //通用提示窗体
 app.Hint = function (message) {
-    $.niftyNoty({message: message, timer: 2000, container: '.nifty-noty', type: 'primary primary-fix'})
+    $.niftyNoty({message: message, timer: 2000, container: '.nifty-noty', type: 'info primary-fix'})
 };
 
 //日期选择器，用法： ng-date
@@ -339,7 +339,7 @@ app.directive('ngUpload', function () {
                     //上传失败
                     bar.removeClass('progress-bar-info');
                     bar.addClass('progress-bar-danger');
-                    app.Hint(data.msg);
+                    app.Hint(data.message);
                 }
             });
 
@@ -452,8 +452,9 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad) {
         var cache = localStorage.getItem(cacheName);
 
         //禁止缓存接口列表
+        var lowerUrl = url.toLowerCase();
         var disabledCaching = ['add', 'set', 'del', 'remove', 'edit', 'sort', 'insert'];
-        if (disabledCaching.any(item => url.contains(item))) {
+        if (disabledCaching.any(item => lowerUrl.contains(item))) {
             cache = null;
         }
 
@@ -491,14 +492,14 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad) {
                     //打印异常接口及信息，方便调试
                     //console.log(url, data);
 
-                    service.Alert(data.ExceptionMessage || data.Message || data, '接口发生异常');
+                    service.Alert(data.ExceptionMessage || data.Message || data.message || data, '接口发生异常');
                 } else {
                     try {
                         if (!data.success) {
                             //打印异常接口及信息，方便调试
                             //console.log(url, data);
 
-                            service.Alert(data.msg, '操作失败');
+                            service.Alert(data.message, '操作失败');
                             return;
                         }
                     } catch (e) {
@@ -707,6 +708,9 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad) {
     service.Hint = function (message) {
         app.Hint(message);
     }
+
+    //当前IP所在城市
+    service.City = remote_ip_info.city;
 
     //异步加载控制器
     //@files: 控制器文件
