@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0 " "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyzz.personalprotal.models.mapper.ShortCutMapper">
+    <!--获取快捷方式列表-->
+    <select id="getShortCutList" resultMap="shortCutMap">
+        select ip, name, url, width, height,
+        (case when (name is null or name = '') and (url is null or url = '') then 0 else 1 end) show
+        from ShortCut where ip = #{ip} and height = #{height}
+        <foreach collection="width" index="index" item="item">
+            union select #{ip}, '', '', #{item}, #{height}, 0
+            where not exists (select 1 from ShortCut where ip = #{ip} and height = #{height} and width = #{item})
+        </foreach>
+        order by width
+    </select>
+
+    <!--获取页面布局-->
+    <select id="getLayout" resultMap="layoutMap">
+        select ip, width, height from LayoutList where ip = #{ip} union select #{ip}, 5, 2
+    </select>
+
+    <!--设置快捷方式-->
+    <insert id="setShortCut" parameterType="com.xyzz.personalprotal.models.database.ShortCutModel">
+        replace into ShortCut (ip, name, url, width, height) values (#{ip}, #{name}, #{url}, #{width}, #{height})
+    </insert>
+
+    <!--设置首页布局-->
+    <insert id="setLayout" parameterType="com.xyzz.personalprotal.models.database.LayoutModel">
+        replace into LayoutList (ip, width, height) values (#{ip}, #{width}, #{height})
+    </insert>
+
+    <!--页面布局实体对照-->
+    <resultMap id="layoutMap" type="com.xyzz.personalprotal.models.database.LayoutModel">
+        <id property="ip" column="ip"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+    </resultMap>
+
+    <!--快捷方式实体对照-->
+    <resultMap id="shortCutMap" type="com.xyzz.personalprotal.models.database.ShortCutModel">
+        <id property="ip" column="ip"/>
+        <id property="width" column="width"/>
+        <id property="height" column="height"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+    </resultMap>
+</mapper>

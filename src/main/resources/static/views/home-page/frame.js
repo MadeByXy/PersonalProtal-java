@@ -5,10 +5,4 @@ angular.module('app').controller('FrameController', function ($scope, factory) {
             location.href = '#home';
         }
     }
-    /***
-     * 修正框架高度为满屏
-     */
-    $scope.FixHeight = function () {
-        return window.innerHeight - 72;
-    }
 })

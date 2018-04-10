@@ -1,94 +1,104 @@
 package com.xyzz.personalprotal.common;
 
-import java.sql.*;
-import java.util.ArrayList;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-/*** 数据库操作类
- */
+import java.io.Reader;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 public class DataBase {
-    //类实例
-    private static DataBase Instance = new DataBase();
+    private static SqlSessionFactory sessionFactory;
 
-    public static DataBase getInstance() {
-        return Instance;
-    }
-
-    private static Connection Conn;
-
-    private DataBase() {
+    static {
         try {
-            Class.forName("org.sqlite.JDBC");
-            Conn = DriverManager.getConnection("jdbc:sqlite::resource:static/database.db");
-        } catch (ClassNotFoundException e) {
-            //记录日志
-            System.out.print(e.getMessage());
-        } catch (SQLException e) {
-            //记录日志
-            System.out.print(e.getMessage());
+            //使用MyBatis提供的Resources类加载mybatis的配置文件
+            Reader reader = Resources.getResourceAsReader("static/mybatis-config.xml");
+            //构建sqlSession的工厂
+            sessionFactory = new SqlSessionFactoryBuilder().build(reader);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    /*** 执行Sql语句， 获取结果集的第一项数据
-     * @param sql: 要执行的Sql语句
+    /***
+     * 执行指定的数据库操作
+     * @param tClass mapper类型
+     * @param mapper 操作的lambda方法
+     * @param <T> mapper类型
      */
-    public static String ExecuteSql_String(String sql) throws SQLException {
-        return DataBase.ExecuteSql_String(sql, new ArrayList<>());
+    public static <T> void invoke(Class<T> tClass, Consumer<T> mapper) {
+        invoke(tClass, mapper, false);
     }
 
-    /*** 执行Sql语句， 获取结果集的第一项数据
-     * @param sql: 要执行的Sql语句
-     * @param parameters: Sql的参数化数据集
+    /***
+     * 提交指定的数据库操作
+     * @param tClass mapper类型
+     * @param mapper 操作的lambda方法
+     * @param <T> mapper类型
      */
-    public static String ExecuteSql_String(String sql, ArrayList<Object> parameters) throws SQLException {
-        return DataBase.ExecuteSql_Pri(sql, parameters).executeQuery().getString(1);
+    public static <T> void commit(Class<T> tClass, Consumer<T> mapper) {
+        invoke(tClass, mapper, true);
     }
 
-    /*** 执行Sql语句， 获取是否执行成功
-     * @param sql: 要执行的Sql语句
+    /***
+     * 执行指定的数据库操作
+     * @param tClass mapper类型
+     * @param mapper 操作的lambda方法
+     * @param <T> mapper类型
+     * @param <R> 返回值类型
+     * @return lambda返回值
      */
-    public static boolean ExecuteSql_Boolean(String sql) throws SQLException {
-        return DataBase.ExecuteSql_Boolean(sql, new ArrayList<>());
+    public static <T, R> R invoke(Class<T> tClass, Function<T, R> mapper) {
+        return invoke(tClass, mapper, false);
     }
 
-    /*** 执行Sql语句， 获取是否执行成功
-     * @param sql: 要执行的Sql语句
-     * @param parameters: Sql的参数化数据集
+    /***
+     * 提交指定的数据库操作
+     * @param tClass mapper类型
+     * @param mapper 操作的lambda方法
+     * @param <T> mapper类型
+     * @param <R> 返回值类型
+     * @return lambda返回值
      */
-    public static boolean ExecuteSql_Boolean(String sql, ArrayList<Object> parameters) throws SQLException {
-        return DataBase.ExecuteSql_Pri(sql, parameters).executeUpdate() > 0;
+    public static <T, R> R commit(Class<T> tClass, Function<T, R> mapper) {
+        return invoke(tClass, mapper, true);
     }
 
-    /*** 执行Sql语句， 获取返回结果
-     * @param sql: 要执行的Sql语句
+    /***
+     * 执行指定的数据库操作
+     * @param tClass mapper类型
+     * @param mapper 操作的lambda方法
+     * @param commit 是否需要提交数据
+     * @param <T> mapper类型
      */
-    public static ResultSet ExecuteSql(String sql) throws SQLException {
-        return DataBase.ExecuteSql(sql, new ArrayList<>());
-    }
-
-    /*** 执行Sql语句， 获取返回结果
-     * @param sql: 要执行的Sql语句
-     * @param parameters: Sql的参数化数据集
-     */
-    public static ResultSet ExecuteSql(String sql, ArrayList<Object> parameters) throws SQLException {
-        return DataBase.ExecuteSql_Pri(sql, parameters).executeQuery();
-    }
-
-    /*** 执行Sql语句， 获取返回结果
-     * @param sql: 要执行的Sql语句
-     * @param parameters: Sql的参数化数据集
-     */
-    private static PreparedStatement ExecuteSql_Pri(String sql, ArrayList<Object> parameters) throws SQLException {
-        if (parameters == null) {
-            parameters = new ArrayList<>();
+    private static <T> void invoke(Class<T> tClass, Consumer<T> mapper, boolean commit) {
+        SqlSession session = sessionFactory.openSession();
+        mapper.accept(session.getMapper(tClass));
+        if (commit) {
+            session.commit();
         }
+        session.close();
+    }
 
-        PreparedStatement preparedStatement = Conn.prepareStatement(sql);
-
-        for (int i = 0; i < parameters.size(); i++) {
-            Object object = parameters.get(i);
-
-            preparedStatement.setObject(i + 1, object);
+    /***
+     * 执行指定的数据库操作
+     * @param tClass mapper类型
+     * @param mapper 操作的lambda方法
+     * @param commit 是否需要提交数据
+     * @param <T> mapper类型
+     * @param <R> 返回值类型
+     * @return lambda返回值
+     */
+    private static <T, R> R invoke(Class<T> tClass, Function<T, R> mapper, boolean commit) {
+        SqlSession session = sessionFactory.openSession();
+        R result = mapper.apply(session.getMapper(tClass));
+        if (commit) {
+            session.commit();
         }
-        return preparedStatement;
+        session.close();
+        return result;
     }
 }

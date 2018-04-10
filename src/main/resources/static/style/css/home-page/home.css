@@ -31,10 +31,14 @@
 }
 
 .shortcut-content {
+    float: left;
+    width: 100%;
 }
 
 .shortcut-content .shortcut-line {
     padding: 0 1%;
+    float: left;
+    width: 100%;
 }
 
 .shortcut-content .shortcut {

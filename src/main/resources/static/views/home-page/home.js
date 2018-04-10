@@ -1,5 +1,4 @@
-angular.module('app').controller('HomeController', function ($scope, factory, $compile) {
-    $scope.Text = '这里是主页'
+angular.module('app').controller('HomeController', function ($scope, factory) {
     $scope.Init = function () {
         $scope.GetWeather();
         $scope.GetShortCut();
@@ -48,7 +47,6 @@ angular.module('app').controller('HomeController', function ($scope, factory, $c
             width: width,
             height: height
         };
-        console.log(width, height, data, $scope.ShortCutData);
     }
 
     /***
@@ -110,4 +108,21 @@ angular.module('app').controller('HomeController', function ($scope, factory, $c
 
     $scope.IsNull = factory.IsNull;
     $scope.ColorLibrary = Enum.ColorLibrary;
+
+    /***
+     * 感谢名单列表
+     * @type {*[]}
+     */
+    $scope.ThanksList = [
+        {"Name": "Bootstrap", "Url": "https://github.com/twbs/bootstrap"},
+        {"Name": "AngularJS", "Url": "https://github.com/angular/angular.js"},
+        {
+            "Name": "Developer",
+            "Url": "http://themes.3rdwavemedia.com/website-templates/free-responsive-website-template-for-developers"
+        },
+        {"Name": "js-beautify", "Url": "https://github.com/beautify-web/js-beautify"},
+        {"Name": "CodeMirror", "Url": "https://github.com/codemirror/codemirror"},
+        {"Name": "particles.js", "Url": "https://github.com/VincentGarreau/particles.js"},
+        {"Name": "bootstrap-contextmenu", "Url": "https://github.com/sydcanem/bootstrap-contextmenu"}
+    ];
 })

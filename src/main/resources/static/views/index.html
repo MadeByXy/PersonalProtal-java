@@ -11,10 +11,13 @@
     <link rel="stylesheet" href="../style/css/newIndex.css">
     <link rel="stylesheet" href="../style/bootstrap-select/bootstrap-select.css">
     <link rel="stylesheet" href="../style/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../style/pace-0.5.6/themes/pace-theme-barber-shop.css">
+    <link rel="stylesheet" href="../style/jquery-ui/jquery-ui.css">
 
+    <script src="../style/pace-0.5.6/pace.js"></script>
     <script src="../style/scripts/sortable.min.js"></script>
     <script src="../style/scripts/jQuery3-1-1.js"></script>
-    <script src="../style/scripts/jquery-ui.js"></script>
+    <script src="../style/jquery-ui/jquery-ui.js"></script>
     <script src="../style/scripts/underscore-min.js"></script>
     <script src="../style/bootstrap/scripts/bootstrap.min.js"></script>
     <script src="../style/scripts/jquery.nicescroll.js"></script>
@@ -83,11 +86,17 @@
                         </ul>
                     </div>
                 </div>
+                <div style="margin-left: 60px;cursor: pointer;" class="nav-link" title="站点设置"
+                     ng-click="OpenSetting()">
+                    <span>设置</span>
+                    <span class="glyphicon glyphicon-cog" aria-hidden="true"
+                          style="float: right; top: 11px; left: 2px;"></span>
+                </div>
             </nav>
         </div>
     </div>
 </header>
-<div ng-scrolling>
+<div ng-scrolling ng-style="{height: FixHeight() + 'px'}">
     <div ui-view></div>
 </div>
 <div class="nifty-noty"></div>

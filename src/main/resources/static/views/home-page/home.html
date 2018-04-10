@@ -18,7 +18,7 @@
         </div>
     </div>
     <!--快捷方式区-->
-    <div class="shortcut-content" ng-sortable="{items: '.shortcut'}">
+    <div class="shortcut-content">
         <div class="shortcut-line" ng-repeat="lineData in ShortCutData track by $index"
              ng-style="{height: (100 / ShortCutData.length) + '%'}">
             <div class="shortcut" ng-repeat="data in lineData track by $index"

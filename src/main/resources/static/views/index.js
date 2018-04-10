@@ -106,17 +106,20 @@ angular.module('app').controller('IndexController', function ($scope, factory) {
             case 13: //Enter
             case undefined:  //鼠标点击事件
                 $scope.SuggestionItems = [];
-                $scope.FrameLocal = $scope.SearchEngineList.data[$scope.SearchEngineList.select].value + encodeURIComponent($scope.searchText);
-                localStorage.setItem("searchText", encodeURIComponent($scope.searchText));
-                localStorage.setItem("engine", $scope.SearchEngineList.data[$scope.SearchEngineList.select].value);
-                //location.href = '#frame';
-                //location.href = '?text=' + encodeURIComponent($scope.searchText) + '&engine=' + $scope.SearchEngineList.data[$scope.SearchEngineList.select].value + '#frame';
-                $scope.$broadcast('ChangeFrame');
+                $scope.FrameLocal =
+                    $scope.SearchEngineList.data[$scope.SearchEngineList.select].value + encodeURIComponent($scope.searchText || '');
                 location.href = '#frame';
                 return;
             default:
                 return;
         }
+    }
+
+    /***
+     * 打开设置面板
+     */
+    $scope.OpenSetting = function () {
+        factory.Hint('功能未完成');
     }
 
     /***
@@ -143,6 +146,13 @@ angular.module('app').controller('IndexController', function ($scope, factory) {
     function transfer(data) {
         $scope.SuggestionIndex = 0;
         $scope.SuggestionItems = data.s;
+    }
+
+    /***
+     * 修正ui-view的高度
+     */
+    $scope.FixHeight = function () {
+        return $(window).height() - 72;
     }
 
     $scope.IsNull = factory.IsNull;

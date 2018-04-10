@@ -232,12 +232,12 @@ app.directive('ngScrolling', function () {
             $(element[0]).niceScroll($.extend({
                 spacebarenabled: false,
                 horizrailenabled: false,
-                cursorcolor: "#32a4f7",
+                cursorcolor: "#428bca",
                 cursoropacitymax: 1,
                 touchbehavior: false,
                 cursorwidth: "4px",
                 cursorborder: "0",
-                cursorborderradius: "5px"
+                cursorborderradius: "0"
             }, scope.ngScrolling));
         }
     };
