@@ -4,6 +4,10 @@ angular.module('app').controller('HomeController', function ($scope, factory) {
         $scope.GetShortCut();
     }
 
+    $scope.$on('RefreshShortCut', function () {
+        $scope.GetShortCut();
+    })
+
     /***
      * 获取天气信息
      */

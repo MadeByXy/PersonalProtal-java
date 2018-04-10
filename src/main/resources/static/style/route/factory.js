@@ -1,5 +1,4 @@
 ﻿var app = angular.module('app', ['ui.router', 'oc.lazyLoad']);
-localStorage.clear();
 
 //图片404后可以由指定错误图片代替，用法： err-src='src'
 app.directive('errSrc', function () {
@@ -435,7 +434,7 @@ app.config(function ($controllerProvider) {
 })
 
 //工厂类
-app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad) {
+app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $compile) {
     var service = {};
 
     //网络请求(异步)

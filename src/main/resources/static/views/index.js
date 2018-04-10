@@ -119,7 +119,12 @@ angular.module('app').controller('IndexController', function ($scope, factory) {
      * 打开设置面板
      */
     $scope.OpenSetting = function () {
-        factory.Hint('功能未完成');
+        factory.OpenDialog('/views/home-page/layout-setting.html', '主页设置', [{
+            text: '保存', action: function (data) {
+                $scope.$broadcast('RefreshShortCut');
+                return true;
+            }
+        }, {text: '关闭'}], 500);
     }
 
     /***

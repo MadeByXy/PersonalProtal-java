@@ -96,9 +96,14 @@
         </div>
     </div>
 </header>
+<!--ui-view节点-->
 <div ng-scrolling ng-style="{height: FixHeight() + 'px'}">
     <div ui-view></div>
 </div>
+<!--消息框节点-->
 <div class="nifty-noty"></div>
+<!--右边框节点-->
+<ng-include
+="/views/plugins/rightDialog.html"></ng-include>
 </body>
 </html>

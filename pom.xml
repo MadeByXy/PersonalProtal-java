@@ -85,6 +85,10 @@
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                 </includes>
+                <excludes>
+                    <!--禁止覆盖db文件-->
+                    <exclude>**/*.db</exclude>
+                </excludes>
                 <filtering>false</filtering>
             </resource>
         </resources>

@@ -15,7 +15,9 @@
 
     <!--获取页面布局-->
     <select id="getLayout" resultMap="layoutMap">
-        select ip, width, height from LayoutList where ip = #{ip} union select #{ip}, 5, 2
+        select ip, width, height from LayoutList where ip = #{ip}
+        union select #{ip}, 5, 2 where not exists (select 1 from LayoutList where ip = #{ip})
+        limit 1
     </select>
 
     <!--设置快捷方式-->

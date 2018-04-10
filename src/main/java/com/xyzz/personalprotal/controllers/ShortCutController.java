@@ -18,6 +18,18 @@ import java.util.List;
 @RequestMapping("/ShortCut")
 public class ShortCutController {
     /***
+     * 获取页面布局信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("/GetLayout")
+    public ApiResult GetLayout(HttpServletRequest request) {
+        return ApiResult.ToSuccess("", (LayoutModel) DataBase.invoke(ShortCutMapper.class, mapper -> {
+            return mapper.getLayout(IpUtil.GetIpAddr(request));
+        }));
+    }
+
+    /***
      * 获取首页快捷方式信息
      * @param request
      * @return
@@ -36,12 +48,12 @@ public class ShortCutController {
     }
 
     /***
-     * 调整首页大小
+     * 调整页面布局
      * @param request
      * @param model 首页布局实体
      * @return
      */
-    @RequestMapping("/FixSize")
+    @RequestMapping("/SetLayout")
     public ApiResult FixSize(HttpServletRequest request, LayoutModel model) {
         model.setIp(IpUtil.GetIpAddr(request));
         DataBase.commit(ShortCutMapper.class, mapper -> {

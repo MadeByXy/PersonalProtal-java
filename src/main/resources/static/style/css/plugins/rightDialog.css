@@ -20,6 +20,7 @@
     padding: 10px 23px;
     transition-property: all;
     transition-duration: 0.55s;
+    box-shadow: 0px 0px 15px 1px black;
 }
 
 .dialog .mask {
