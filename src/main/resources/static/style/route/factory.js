@@ -441,7 +441,8 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
     //@url：接口地址
     //@data：接口参数
     //@func：返回后执行的操作
-    service.Query = function (url, data, func) {
+    //@deferred：当传入该值时，会在请求失败后解除被禁用的dom
+    service.Query = function (url, data, func, deferred) {
         if (service.IsNull(url)) {
             service.Alert('请求地址不能为空', '操作失败');
             return;
@@ -452,7 +453,7 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
 
         //禁止缓存接口列表
         var lowerUrl = url.toLowerCase();
-        var disabledCaching = ['add', 'set', 'del', 'remove', 'edit', 'sort', 'insert'];
+        var disabledCaching = ['add', 'set', 'del', 'remove', 'edit', 'sort', 'insert', 'audit'];
         if (disabledCaching.any(item => lowerUrl.contains(item))) {
             cache = null;
         }
@@ -467,6 +468,7 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
                         value: encodeURIComponent(typeof(value) == "object" ? JSON.stringify(value) : value)
                     });
                 })
+
                 var obj = this;
                 $http({
                     method: 'POST',
@@ -475,9 +477,9 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     data: array.select(item => item.key + '=' + item.value).join('&')
-                }).success(data => {
+                }).success(function (data) {
                     obj.dealResult(data, func, false, loadCache);
-                }).error(data => {
+                }).error(function (data) {
                     obj.dealResult(data, func, true);
                 })
             },
@@ -489,16 +491,24 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
                 loadCache = loadCache || false;
                 if (isFail) {
                     //打印异常接口及信息，方便调试
-                    //console.log(url, data);
+                    console.log(url, data);
 
-                    service.Alert(data.ExceptionMessage || data.Message || data.message || data, '接口发生异常');
+                    service.Alert(data.ExceptionMessage || data.Message || data, '接口发生异常');
+
+                    if (deferred) {
+                        deferred.resolve();
+                    }
                 } else {
                     try {
                         if (!data.success) {
                             //打印异常接口及信息，方便调试
-                            //console.log(url, data);
+                            console.log(url, data);
 
-                            service.Alert(data.message, '操作失败');
+                            service.Alert(data.msg, '操作失败');
+
+                            if (deferred) {
+                                deferred.resolve();
+                            }
                             return;
                         }
                     } catch (e) {
@@ -518,7 +528,16 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
 
                     if (func && (!loadCache || JSON.stringify(cache.result) != JSON.stringify(data))) {
                         //如果读取缓存模式，仅当接口结果与缓存不同时更新数据
-                        func(service.Clone(data));
+                        try {
+                            func(service.Clone(data));
+                        } catch (e) {
+                            service.Alert(e, '页面响应异常');
+                            console.log(e)
+
+                            if (deferred) {
+                                deferred.resolve();
+                            }
+                        }
                     }
 
                     //更新缓存结果数据
@@ -573,11 +592,16 @@ app.factory('factory', function ($http, $sce, $q, $rootScope, $ocLazyLoad, $comp
                         //console.log('缓存返回')
                         httpQuery.dealResult(cache.result, func);
                     } else {
-                        //console.log('无结果等待')
-                        //如果不存在结果，等待接口返回结果
-                        setTimeout(function () {
-                            service.Query(url, data, func);
-                        }, 50)
+                        if (Date.parse(new Date()) - cache.time > Enum.CacheIgnoredTime) {
+                            //如果过期，不进行等待，直接请求
+                            httpQuery.query(url, data, func);
+                        } else {
+                            //console.log('无结果等待')
+                            //如果不存在结果，等待接口返回结果
+                            setTimeout(function () {
+                                service.Query(url, data, func);
+                            }, 50)
+                        }
                     }
                 }
             }

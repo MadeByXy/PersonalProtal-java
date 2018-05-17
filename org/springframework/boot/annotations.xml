@@ -1,0 +1,5 @@
+<root>
+    <item name='org.springframework.boot.SpringApplication'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>
